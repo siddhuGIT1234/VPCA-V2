@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VPCA Client</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #111; color: #eee; font: 14px system-ui, sans-serif; }
+    #view { position: absolute; inset: 0; }
+    #panel {
+      position: absolute; top: 12px; left: 12px; z-index: 10; width: 260px;
+      background: rgba(20,20,20,.88); padding: 10px 14px; border-radius: 8px;
+      max-height: calc(100% - 48px); overflow-y: auto;
+    }
+    #panel label { display: block; margin: 8px 0 2px; color: #aaa; }
+    #panel select, #panel input[type=number], #panel button { width: 100%; padding: 4px; box-sizing: border-box; }
+    #panel input[type=range] { width: 100%; }
+    .section { border-top: 1px solid #333; margin-top: 10px; padding-top: 6px; }
+    #upload-row { display: flex; gap: 6px; }
+    #upload-row button { width: auto; flex: 1; }
+    #file { display: none; }
+    progress { width: 100%; height: 6px; margin-top: 6px; display: none; }
+    #uploadMsg, #dsInfo { font-size: 12px; color: #aaa; margin-top: 4px; word-break: break-word; }
+    #status { margin-top: 10px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+    .err { color: #ff8a80 !important; }
+    #help { font-size: 12px; color: #aaa; margin-top: 8px; line-height: 1.5; }
+    #help b { color: #ddd; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div id="view"></div>
+  <div id="panel">
+    <strong>VPCA progressive delivery</strong>
+
+    <div class="section">
+      <label>Upload VTK file (.vtp .vtu .vti .vtk .vtm)</label>
+      <div id="upload-row">
+        <button id="pick">Choose file…</button>
+      </div>
+      <input id="file" type="file" accept=".vtp,.vtu,.vti,.vtk,.vtm" />
+      <progress id="uploadBar" max="100" value="0"></progress>
+      <div id="uploadMsg"></div>
+    </div>
+
+    <div class="section">
+      <label>Dataset</label>
+      <select id="dataset"></select>
+      <div id="dsInfo"></div>
+      <label>Method</label>
+      <select id="method"><option value="random">random</option></select>
+      <label>Delay per level (ms)</label>
+      <input id="delay" type="number" value="500" min="0" step="100" />
+      <button id="start" style="margin-top:10px">Start stream</button>
+      <button id="vr" style="margin-top:6px" disabled>Checking VR…</button>
+    </div>
+
+    <div class="section">
+      <label>Color by</label>
+      <select id="colorBy"></select>
+      <label>Point size: <span id="psVal">2</span></label>
+      <input id="pointSize" type="range" min="1" max="10" value="2" />
+      <button id="resetView" style="margin-top:8px">Reset view</button>
+      <div id="help">
+        <b>Rotate:</b> hold left button + drag<br>
+        <b>Zoom:</b> scroll wheel / two-finger swipe, or right-drag<br>
+        <b>Pan:</b> Shift + drag, or middle-drag<br>
+        <b>Touchpad:</b> press down (or double-tap-hold) and move
+      </div>
+    </div>
+
+    <div class="section">
+      <strong>Point to region</strong>
+      <div id="regionHelp" style="font-size:12px;margin-top:6px">After streaming completes, click Select point, then click a visible point. Regions are numbered spatial boxes.</div>
+      <button id="selectPoint" disabled style="margin-top:8px">Select point</button>
+      <button id="clearSelection" style="margin-top:6px">Clear highlight</button>
+      <div id="selectionInfo" style="font-size:12px;line-height:1.5;margin-top:8px;white-space:pre-line">No point selected.</div>
+    </div>
+    <div id="status">Not started</div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
